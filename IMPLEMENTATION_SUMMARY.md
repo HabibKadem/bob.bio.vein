@@ -44,6 +44,10 @@ roi_annotations/
 
 **Purpose**: Deep learning model combining CNN and Vision Transformer architectures.
 
+**Architecture Diagram**:
+
+See the complete architecture diagram in `doc/cnn_vit_architecture_diagram.png` for a visual representation of the model.
+
 **Architecture Components**:
 
 #### a. CNN Backbone
@@ -51,18 +55,19 @@ roi_annotations/
 - Batch normalization and ReLU activation
 - Max pooling for spatial downsampling
 - Extracts local vein patterns
+- Output: 56×56×256 feature maps
 
 #### b. Vision Transformer
-- Patch embedding (default: 16x16 patches)
-- Positional encoding
+- Patch embedding (default: 16x16 patches) → 256-dim
+- Positional encoding with learnable CLS token
 - Multi-head self-attention (8 heads)
 - 6 transformer encoder layers
 - Captures global context and relationships
 
 #### c. Classification Head
 - Layer normalization
-- Fully connected layers with dropout
-- Outputs: person identification
+- Fully connected layers (256→128→138) with dropout
+- Outputs: person identification for 138 classes
 
 **Model Classes**:
 - `VeinCNNViTModel`: High-level API for training and inference

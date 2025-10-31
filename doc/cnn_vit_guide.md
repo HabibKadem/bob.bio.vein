@@ -146,20 +146,26 @@ print(f"Predicted class: {class_id}, Confidence: {confidence:.4f}")
 
 ## Model Architecture
 
+![CNN+ViT Architecture Diagram](cnn_vit_architecture_diagram.png)
+
 The CNN+ViT hybrid model combines:
 
 1. **CNN Backbone**: 
-   - 3 convolutional blocks with batch normalization and max pooling
+   - 3 convolutional blocks (64→128→256 filters) with batch normalization and max pooling
    - Extracts local features from vein patterns
+   - Output: 56×56×256 feature maps
 
 2. **Vision Transformer**:
-   - Patch embedding with positional encoding
-   - Multi-head self-attention mechanism
+   - Patch embedding (16×16 patches) with convolutional projection to 256-dim
+   - Positional encoding with learnable CLS token
+   - 6-layer transformer encoder with 8 attention heads
    - Captures global context and spatial relationships
 
 3. **Classification Head**:
-   - Fully connected layers
-   - Outputs person identification
+   - Layer normalization
+   - Fully connected layers (256→128→138)
+   - ReLU activation and dropout
+   - Outputs person identification for 138 classes
 
 ### Model Parameters
 
