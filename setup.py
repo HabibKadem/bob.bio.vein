@@ -57,6 +57,7 @@ setup(
             "bob_bio_vein_view_sample.py = bob.bio.vein.script.view_sample:main",
             "bob_bio_vein_blame.py = bob.bio.vein.script.blame:main",
             "bob_bio_vein_train_cnn_vit.py = bob.bio.vein.script.train_cnn_vit:main",
+            "bob_bio_vein_cnn_vit_examples.py = bob.bio.vein.script.cnn_vit_examples:main",
         ],
     },
     classifiers=[
