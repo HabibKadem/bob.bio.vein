@@ -58,6 +58,7 @@ setup(
             "bob_bio_vein_blame.py = bob.bio.vein.script.blame:main",
             "bob_bio_vein_train_cnn_vit.py = bob.bio.vein.script.train_cnn_vit:main",
             "bob_bio_vein_cnn_vit_examples.py = bob.bio.vein.script.cnn_vit_examples:main",
+            "bob_bio_vein_extract_roi.py = bob.bio.vein.script.extract_roi:main",
         ],
     },
     classifiers=[

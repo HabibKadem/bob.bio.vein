@@ -101,7 +101,28 @@ bob_bio_vein_train_cnn_vit.py \
 - Test set evaluation
 - Label mapping persistence
 
-### 4. Configuration Files
+### 4. ROI Extraction Utility (`bob/bio/vein/script/extract_roi.py`)
+
+**Purpose**: Extract and save ROI regions from dorsal hand vein images.
+
+**Command**:
+```bash
+bob_bio_vein_extract_roi.py \
+    /path/to/images \
+    /path/to/roi_annotations \
+    /path/to/output
+```
+
+**Features**:
+- Loads images and ROI annotation files
+- Creates binary mask from ROI polygon coordinates
+- Extracts ROI region with background masked to 0
+- Crops to ROI bounding box to save space
+- Supports multiple image formats (PNG, JPG, BMP, TIF)
+- Option to save only mask images (`-m` flag)
+- Verbose logging options
+
+### 5. Configuration Files
 
 #### a. `bob/bio/vein/config/database/dorsalhandveins.py`
 - Database configuration

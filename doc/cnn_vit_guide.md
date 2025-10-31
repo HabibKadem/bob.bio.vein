@@ -56,6 +56,35 @@ ROI files should be named matching the image files with `.txt` extension:
 
 The annotations mark the place where the hand/vein pattern is on the image, excluding the background.
 
+### Extracting ROI Regions
+
+If you have ROI annotations, you can extract and save the ROI regions from your images using the provided utility:
+
+```bash
+bob_bio_vein_extract_roi.py \
+    /path/to/DorsalHandVeins_DB1_png/train \
+    /path/to/roi_annotations/train \
+    /path/to/output/roi_extracted
+```
+
+This will:
+- Load each image and its corresponding ROI annotation file
+- Create a mask from the ROI polygon
+- Extract the ROI region and crop to its bounding box
+- Save the extracted ROI images
+
+Options:
+- `-v` or `--verbose`: Increase verbosity (use `-vv` for more detail)
+- `-m` or `--mask-only`: Save only the binary mask images instead of masked images
+
+Example to extract only masks:
+```bash
+bob_bio_vein_extract_roi.py -vv -m \
+    /path/to/DorsalHandVeins_DB1_png/train \
+    /path/to/roi_annotations/train \
+    /path/to/output/masks
+```
+
 ## Usage
 
 ### Training the Model

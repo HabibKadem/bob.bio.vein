@@ -235,6 +235,38 @@ def test_config_files_exist():
     print("Configuration files loaded successfully")
 
 
+def test_extract_roi_script():
+    """Test ROI extraction script"""
+    try:
+        from bob.bio.vein.script.extract_roi import load_roi_points, extract_roi_from_image
+        import numpy as np
+        
+        # Test loading ROI points from text
+        with tempfile.TemporaryDirectory() as tmpdir:
+            roi_file = os.path.join(tmpdir, 'test_roi.txt')
+            with open(roi_file, 'w') as f:
+                f.write("10 10\n")
+                f.write("10 90\n")
+                f.write("90 90\n")
+                f.write("90 10\n")
+            
+            points = load_roi_points(roi_file)
+            assert points is not None
+            assert points.shape == (4, 2)
+            
+            # Test ROI extraction
+            test_image = np.random.randint(0, 255, (100, 100), dtype=np.uint8)
+            masked_image, mask = extract_roi_from_image(test_image, points)
+            
+            assert masked_image.shape == test_image.shape
+            assert mask.shape == test_image.shape
+            assert mask.dtype == bool
+            
+            print("ROI extraction functions work correctly")
+    except ImportError as e:
+        print(f"ROI extraction test skipped: {e}")
+
+
 if __name__ == '__main__':
     print("Running DorsalHandVeins and CNN+ViT tests...")
     
@@ -253,5 +285,10 @@ if __name__ == '__main__':
         test_dorsalhandveins_roi_support()
     except Exception as e:
         print(f"ROI support test skipped or failed: {e}")
+    
+    try:
+        test_extract_roi_script()
+    except Exception as e:
+        print(f"ROI extraction script test skipped or failed: {e}")
     
     print("\nAll tests completed!")

@@ -102,6 +102,27 @@ Les annotations ROI sont des fichiers texte avec des coordonnées (y, x) une par
 - `person_001_db1_L1.txt` pour `person_001_db1_L1.png`
 - etc.
 
+**Extraction des Régions ROI**:
+
+Si vous avez des annotations ROI, vous pouvez extraire et sauvegarder les régions ROI avec l'utilitaire fourni:
+
+```bash
+bob_bio_vein_extract_roi.py \
+    /chemin/vers/DorsalHandVeins_DB1_png/train \
+    /chemin/vers/roi_annotations/train \
+    /chemin/vers/sortie/roi_extrait
+```
+
+Cela va:
+- Charger chaque image et son fichier d'annotation ROI correspondant
+- Créer un masque à partir du polygone ROI
+- Extraire la région ROI et rogner à sa boîte englobante
+- Sauvegarder les images ROI extraites
+
+Options:
+- `-v` ou `--verbose`: Augmenter la verbosité
+- `-m` ou `--mask-only`: Sauvegarder uniquement les masques binaires
+
 ### Étape 3: Entraîner le Modèle
 
 ```bash
