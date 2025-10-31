@@ -98,9 +98,10 @@ def load_dorsal_hand_vein_data(data_dir, split_ratio=(0.7, 0.15, 0.15)):
                 try:
                     img = bob.io.base.load(img_path)
                     if img is not None:
-                        # Ensure grayscale
+                        # Ensure grayscale - use weighted conversion for better contrast
                         if img.ndim == 3:
-                            img = img.mean(axis=0)
+                            # Use standard RGB to grayscale weights
+                            img = 0.299 * img[0] + 0.587 * img[1] + 0.114 * img[2]
                         images.append(img)
                         labels.append(label_map[sid])
                 except Exception as e:

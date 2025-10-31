@@ -87,7 +87,7 @@ class VeinCNNViTModel:
         
         # Training parameters
         self.optimizer = None
-        self.criterion = None
+        self.criterion = nn.CrossEntropyLoss()  # Initialize criterion
         self.is_trained = False
     
     def train(
@@ -410,8 +410,9 @@ class CNNViTNetwork(nn.Module):
     
     def _init_weights(self):
         """Initialize model weights"""
-        nn.init.trunc_normal_(self.pos_embed, std=0.02)
-        nn.init.trunc_normal_(self.cls_token, std=0.02)
+        # Use torch.nn.init.trunc_normal_ (correct function)
+        torch.nn.init.trunc_normal_(self.pos_embed, std=0.02)
+        torch.nn.init.trunc_normal_(self.cls_token, std=0.02)
         
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
@@ -422,7 +423,7 @@ class CNNViTNetwork(nn.Module):
                 nn.init.constant_(m.weight, 1)
                 nn.init.constant_(m.bias, 0)
             elif isinstance(m, nn.Linear):
-                nn.init.trunc_normal_(m.weight, std=0.02)
+                torch.nn.init.trunc_normal_(m.weight, std=0.02)
                 if m.bias is not None:
                     nn.init.constant_(m.bias, 0)
     

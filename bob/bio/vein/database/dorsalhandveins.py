@@ -85,13 +85,15 @@ class DorsalHandVeinsDatabase(CSVDataset):
     
     def _get_protocol_path(self):
         """Get the path to the protocol CSV files"""
-        protocol_dir = os.path.join(
-            os.path.dirname(__file__), 
-            'protocols', 
+        # Use user cache directory for protocol files
+        import tempfile
+        cache_dir = os.path.join(
+            tempfile.gettempdir(),
+            'bob_bio_vein_protocols',
             'dorsalhandveins'
         )
-        os.makedirs(protocol_dir, exist_ok=True)
-        return os.path.join(protocol_dir, f'{self.protocol_name}.csv')
+        os.makedirs(cache_dir, exist_ok=True)
+        return os.path.join(cache_dir, f'{self.protocol_name}.csv')
     
     def _create_protocol_files(self):
         """Create CSV protocol files for the database"""
