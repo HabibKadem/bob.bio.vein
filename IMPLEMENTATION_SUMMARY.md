@@ -16,6 +16,7 @@ A complete CNN+Vision Transformer (ViT) hybrid model has been implemented for pe
 - 70/15/15 train/dev/eval split
 - Compatible with bob.bio.base infrastructure
 - Configuration via: `bob config set bob.bio.vein.dorsalhandveins.directory [PATH]`
+- Optional ROI annotations via: `bob config set bob.bio.vein.dorsalhandveins.roi [ROI_PATH]`
 
 **Expected Dataset Structure**:
 ```
@@ -27,6 +28,16 @@ DorsalHandVeins_DB1_png/
         person_001_db1_L4.png
         ...
         person_138_db1_L4.png
+```
+
+**Optional ROI Annotations**:
+ROI files can be provided as text files with (y, x) coordinates per line:
+```
+roi_annotations/
+    train/
+        person_001_db1_L1.txt
+        person_001_db1_L2.txt
+        ...
 ```
 
 ### 2. CNN+ViT Model (`bob/bio/vein/extractor/CNNViT.py`)

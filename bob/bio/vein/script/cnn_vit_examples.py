@@ -60,6 +60,14 @@ def example_database_setup():
         print("\nTo use the database, set the path:")
         print("  bob config set bob.bio.vein.dorsalhandveins.directory /path/to/dataset")
         
+        print("\nOptional: Set ROI (Region of Interest) annotations path:")
+        print("  bob config set bob.bio.vein.dorsalhandveins.roi /path/to/roi")
+        
+        print("\nROI files should be text files with (y, x) coordinates per line:")
+        print("  - person_001_db1_L1.txt for person_001_db1_L1.png")
+        print("  - Format: one (y, x) coordinate pair per line")
+        print("  - Forms a polygon marking the hand/vein region")
+        
     except Exception as e:
         print(f"✗ Error: {e}")
         return False

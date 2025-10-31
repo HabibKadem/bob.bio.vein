@@ -39,6 +39,23 @@ Set the path to your dataset:
 bob config set bob.bio.vein.dorsalhandveins.directory /path/to/DorsalHandVeins_DB1_png
 ```
 
+Optionally, set the path to ROI (Region of Interest) annotations:
+
+```bash
+bob config set bob.bio.vein.dorsalhandveins.roi /path/to/roi_annotations
+```
+
+**ROI Annotations (Optional)**
+
+If you have region-of-interest annotations, they should be provided as text files with one annotation per line in the format `(y, x)`, respecting Bob's image encoding convention. The interconnection of these points in a polygon forms the ROI.
+
+ROI files should be named matching the image files with `.txt` extension:
+- `person_001_db1_L1.txt` for `person_001_db1_L1.png`
+- `person_001_db1_L2.txt` for `person_001_db1_L2.png`
+- etc.
+
+The annotations mark the place where the hand/vein pattern is on the image, excluding the background.
+
 ## Usage
 
 ### Training the Model

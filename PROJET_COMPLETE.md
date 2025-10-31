@@ -92,6 +92,16 @@ pip install torch torchvision
 bob config set bob.bio.vein.dorsalhandveins.directory /chemin/vers/dorsalhandveinsproject/DorsalHandVeins_DB1_png
 ```
 
+**Optionnel**: Configurer les annotations ROI (Region of Interest):
+
+```bash
+bob config set bob.bio.vein.dorsalhandveins.roi /chemin/vers/annotations_roi
+```
+
+Les annotations ROI sont des fichiers texte avec des coordonnées (y, x) une par ligne, définissant un polygone qui marque la région de la main/veines sur l'image. Les fichiers doivent avoir le même nom que les images avec extension `.txt`:
+- `person_001_db1_L1.txt` pour `person_001_db1_L1.png`
+- etc.
+
 ### Étape 3: Entraîner le Modèle
 
 ```bash

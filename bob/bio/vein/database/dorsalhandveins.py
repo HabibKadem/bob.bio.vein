@@ -9,7 +9,10 @@ import os
 import glob
 from pathlib import Path
 
+from sklearn.pipeline import make_pipeline
+
 from bob.bio.base.database import CSVDataset, CSVToSampleLoaderBiometrics
+from bob.bio.vein.database.roi_annotation import ROIAnnotation
 from bob.extension import rc
 import bob.io.base
 
@@ -39,6 +42,17 @@ class DorsalHandVeinsDatabase(CSVDataset):
     Configuration:
         Set the database path using:
         bob config set bob.bio.vein.dorsalhandveins.directory [DATABASE PATH]
+        
+        Optionally set ROI annotation path using:
+        bob config set bob.bio.vein.dorsalhandveins.roi [ROI ANNOTATION PATH]
+    
+    ROI Annotations:
+        Region-of-Interest annotations can be provided as text files with one
+        annotation per line in the format (y, x), respecting Bob's image encoding
+        convention. The interconnection of these points in a polygon forms the ROI.
+        
+        ROI files should be named matching the image files with .txt extension:
+        e.g., person_001_db1_L1.txt for person_001_db1_L1.png
     
     Protocols:
         - 'train-test': Uses first 3 images for enrollment and last image for probing
@@ -68,17 +82,19 @@ class DorsalHandVeinsDatabase(CSVDataset):
         # Create CSV protocol files if they don't exist
         self._create_protocol_files()
         
-        # Initialize parent class - we'll use a simple file-based loader for now
-        # since we're creating CSV files on the fly
+        # Initialize parent class with ROI annotation support
         super().__init__(
             name='dorsalhandveins',
             dataset_protocol_path=self._get_protocol_path(),
             protocol=protocol,
-            csv_to_sample_loader=CSVToSampleLoaderBiometrics(
-                data_loader=bob.io.base.load,
-                dataset_original_directory=self.base_dir,
-                extension='',
-                reference_id_equal_subject_id=True,
+            csv_to_sample_loader=make_pipeline(
+                CSVToSampleLoaderBiometrics(
+                    data_loader=bob.io.base.load,
+                    dataset_original_directory=self.base_dir,
+                    extension='',
+                    reference_id_equal_subject_id=True,
+                ),
+                ROIAnnotation(roi_path=rc.get('bob.bio.vein.dorsalhandveins.roi', '')),
             ),
             score_all_vs_all=True,
         )

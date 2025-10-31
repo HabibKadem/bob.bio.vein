@@ -160,6 +160,72 @@ def test_dorsalhandveins_with_mock_data():
                 rc.pop('bob.bio.vein.dorsalhandveins.directory', None)
 
 
+def test_dorsalhandveins_roi_support():
+    """Test DorsalHandVeins database with ROI annotations"""
+    from bob.bio.vein.database.dorsalhandveins import DorsalHandVeinsDatabase
+    from bob.extension import rc
+    
+    # Create temporary directories with mock data
+    with tempfile.TemporaryDirectory() as tmpdir:
+        train_dir = os.path.join(tmpdir, 'train')
+        roi_dir = os.path.join(tmpdir, 'roi', 'train')
+        os.makedirs(train_dir, exist_ok=True)
+        os.makedirs(roi_dir, exist_ok=True)
+        
+        # Create mock images and ROI files
+        for person_id in range(1, 4):  # 3 people for testing
+            for img_num in range(1, 3):  # 2 images each
+                filename = f"person_{person_id:03d}_db1_L{img_num}.png"
+                filepath = os.path.join(train_dir, filename)
+                
+                # Create a small grayscale image
+                import numpy as np
+                img_data = np.random.randint(0, 255, (100, 100), dtype=np.uint8)
+                
+                try:
+                    from PIL import Image
+                    Image.fromarray(img_data, mode='L').save(filepath)
+                except ImportError:
+                    open(filepath, 'w').close()
+                
+                # Create mock ROI file
+                roi_filename = f"person_{person_id:03d}_db1_L{img_num}.txt"
+                roi_filepath = os.path.join(roi_dir, roi_filename)
+                
+                # Write mock ROI coordinates (simple rectangle)
+                with open(roi_filepath, 'w') as f:
+                    f.write("10 10\n")
+                    f.write("10 90\n")
+                    f.write("90 90\n")
+                    f.write("90 10\n")
+        
+        # Temporarily set the config
+        original_dir_value = rc.get('bob.bio.vein.dorsalhandveins.directory', '')
+        original_roi_value = rc.get('bob.bio.vein.dorsalhandveins.roi', '')
+        
+        try:
+            rc['bob.bio.vein.dorsalhandveins.directory'] = tmpdir
+            rc['bob.bio.vein.dorsalhandveins.roi'] = os.path.join(tmpdir, 'roi')
+            
+            # Test database instantiation with ROI
+            database = DorsalHandVeinsDatabase(protocol='train-test')
+            
+            assert database is not None
+            print(f"DorsalHandVeins database created with ROI support in {tmpdir}")
+            
+        finally:
+            # Restore original config
+            if original_dir_value:
+                rc['bob.bio.vein.dorsalhandveins.directory'] = original_dir_value
+            else:
+                rc.pop('bob.bio.vein.dorsalhandveins.directory', None)
+            
+            if original_roi_value:
+                rc['bob.bio.vein.dorsalhandveins.roi'] = original_roi_value
+            else:
+                rc.pop('bob.bio.vein.dorsalhandveins.roi', None)
+
+
 def test_config_files_exist():
     """Test that configuration files exist"""
     import bob.bio.vein.config.cnn_vit as cnn_vit_config
@@ -182,5 +248,10 @@ if __name__ == '__main__':
         test_dorsalhandveins_with_mock_data()
     except Exception as e:
         print(f"Mock data test skipped or failed: {e}")
+    
+    try:
+        test_dorsalhandveins_roi_support()
+    except Exception as e:
+        print(f"ROI support test skipped or failed: {e}")
     
     print("\nAll tests completed!")
