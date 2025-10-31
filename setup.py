@@ -36,20 +36,29 @@ setup(
             "wld = bob.bio.vein.config.wide_line_detector",
             # verafinger contactless
             "vera_nom = bob.bio.vein.config.database.verafinger_contactless_nom",
+            # dorsal hand veins
+            "dorsalhandveins = bob.bio.vein.config.database.dorsalhandveins",
+            # cnn+vit model
+            "cnn_vit = bob.bio.vein.config.cnn_vit",
         ],
         "bob.bio.database": [
             "utfvp = bob.bio.vein.config.database.utfvp_nom:database",
             "verafinger_contactless = bob.bio.vein.config.database.verafinger_contactless_nom:database",
+            "dorsalhandveins = bob.bio.vein.config.database.dorsalhandveins:database",
         ],
         "bob.bio.pipeline": [
             "wld = bob.bio.vein.config.wide_line_detector:pipeline",
             "mc = bob.bio.vein.config.maximum_curvature:pipeline",
             "rlt = bob.bio.vein.config.repeated_line_tracking:pipeline",
+            "cnn_vit = bob.bio.vein.config.cnn_vit:pipeline",
         ],
         "console_scripts": [
             "bob_bio_vein_compare_rois.py = bob.bio.vein.script.compare_rois:main",
             "bob_bio_vein_view_sample.py = bob.bio.vein.script.view_sample:main",
             "bob_bio_vein_blame.py = bob.bio.vein.script.blame:main",
+            "bob_bio_vein_train_cnn_vit.py = bob.bio.vein.script.train_cnn_vit:main",
+            "bob_bio_vein_cnn_vit_examples.py = bob.bio.vein.script.cnn_vit_examples:main",
+            "bob_bio_vein_extract_roi.py = bob.bio.vein.script.extract_roi:main",
         ],
     },
     classifiers=[
