@@ -219,8 +219,8 @@ class VeinCapsNet(nn.Module):
         # Layer 1: Initial convolution (like your CNN)
         self.conv1 = nn.Conv2d(
             in_channels=input_channels,
-            out_channels=256,
-            kernel_size=9,
+            out_channels=128,
+            kernel_size=3,
             stride=1,
             padding=0
         )
@@ -228,16 +228,16 @@ class VeinCapsNet(nn.Module):
         
         # Layer 2: Primary Capsules
         self.primary_capsules = PrimaryCapsule(
-            in_channels=256,
-            num_capsules=32,
+            in_channels=128,
+            num_capsules=16,
             capsule_dim=primary_caps_dim,
-            kernel_size=9,
+            kernel_size=3,
             stride=2,
             padding=0
         )
         
         # Layer 3: Digit Capsules (one per person class)
-        num_capsule_types = 32
+        num_capsule_types = 16
         self.digit_capsules = DigitCapsule(
             num_capsules=num_classes,
             num_routes=num_capsule_types,
