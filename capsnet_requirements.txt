@@ -1,0 +1,41 @@
+# Requirements for Capsule Neural Network Implementation
+# =========================================================
+#
+# Install all dependencies with:
+#   pip install -r capsnet_requirements.txt
+#
+# Or install individually:
+#   pip install tensorflow>=2.8.0
+#   pip install numpy
+#   pip install scikit-learn
+#   pip install matplotlib
+#   pip install pillow
+
+# Deep Learning Framework
+tensorflow>=2.8.0,<3.0.0
+
+# Numerical Computing
+numpy>=1.19.0
+
+# Data Processing and Splitting
+scikit-learn>=0.24.0
+
+# Visualization
+matplotlib>=3.3.0
+
+# Image Processing
+Pillow>=8.0.0
+
+# Optional: For faster data loading
+# tqdm>=4.50.0
+
+# Optional: For GPU support (automatically included in tensorflow-gpu)
+# Note: tensorflow>=2.0 includes GPU support by default if CUDA is available
+
+# Optional: For advanced image preprocessing
+# opencv-python>=4.5.0
+# scikit-image>=0.18.0
+
+# Optional: For model visualization
+# graphviz>=0.16
+# pydot>=1.4.0

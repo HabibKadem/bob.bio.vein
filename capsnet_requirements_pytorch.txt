@@ -1,0 +1,45 @@
+# Requirements for Capsule Neural Network Implementation (PyTorch)
+# ==================================================================
+#
+# Install all dependencies with:
+#   pip install -r capsnet_requirements_pytorch.txt
+#
+# Or install individually:
+#   pip install torch torchvision
+#   pip install numpy
+#   pip install scikit-learn
+#   pip install matplotlib
+#   pip install pillow
+
+# Deep Learning Framework (PyTorch)
+torch>=1.12.0
+torchvision>=0.13.0
+
+# Numerical Computing
+numpy>=1.19.0
+
+# Data Processing and Splitting
+scikit-learn>=0.24.0
+
+# Visualization
+matplotlib>=3.3.0
+
+# Image Processing
+Pillow>=8.0.0
+
+# Optional: For progress bars
+# tqdm>=4.50.0
+
+# Optional: For GPU support
+# Note: PyTorch with CUDA support can be installed separately
+# Visit https://pytorch.org/get-started/locally/ for instructions
+# For CUDA 11.8:
+# pip install torch torchvision --index-url https://download.pytorch.org/whl/cu118
+
+# Optional: For advanced image preprocessing
+# opencv-python>=4.5.0
+# scikit-image>=0.18.0
+
+# Optional: For model visualization
+# torchsummary>=1.5.1
+# tensorboard>=2.8.0
