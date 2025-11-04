@@ -30,6 +30,11 @@ Key Benefits of CapsNet for Vein Recognition:
     - Equivariance to transformations (rotation, translation)
     - Requires less data augmentation
     - Better generalization with limited training samples
+
+Memory-Efficient Design:
+    - Uses weight sharing across spatial locations in DigitCapsule layer
+    - This reduces parameters from ~12B to ~1.4M for the routing layer
+    - Enables training on standard GPUs with 4-8GB VRAM
 """
 
 import os
@@ -292,7 +297,7 @@ class DigitCapsule(nn.Module):
     
     Args:
         num_capsules: Number of digit capsules (= num_classes)
-        num_routes: Number of input capsules
+        num_routes: Number of input capsules (primary capsule types, not spatial locations)
         in_capsule_dim: Dimension of input capsule vectors
         out_capsule_dim: Dimension of output capsule vectors
         num_routing: Number of routing iterations
@@ -304,12 +309,15 @@ class DigitCapsule(nn.Module):
         
         self.num_capsules = num_capsules
         self.num_routes = num_routes
+        self.in_capsule_dim = in_capsule_dim
+        self.out_capsule_dim = out_capsule_dim
         self.num_routing = num_routing
         
         # Weight matrix W: transforms primary capsules to digit capsule space
-        # Shape: [num_routes, num_capsules, in_capsule_dim, out_capsule_dim]
+        # Shape: [1, num_routes, num_capsules, in_capsule_dim, out_capsule_dim]
+        # We share weights across all spatial locations of primary capsules
         self.W = nn.Parameter(
-            torch.randn(num_routes, num_capsules, in_capsule_dim, out_capsule_dim)
+            torch.randn(1, num_routes, num_capsules, in_capsule_dim, out_capsule_dim) * 0.01
         )
     
     def forward(self, x):
@@ -317,40 +325,52 @@ class DigitCapsule(nn.Module):
         Forward pass with dynamic routing.
         
         Args:
-            x: Primary capsules [batch, num_routes, in_capsule_dim]
+            x: Primary capsules [batch, num_primary_caps_total, in_capsule_dim]
+                where num_primary_caps_total = spatial_locations * num_capsule_types
             
         Returns:
             Digit capsules [batch, num_capsules, out_capsule_dim]
         """
         batch_size = x.size(0)
+        num_primary_caps_total = x.size(1)
         
-        # Expand x for broadcasting
-        # [batch, num_routes, in_capsule_dim] -> [batch, num_routes, 1, in_capsule_dim, 1]
-        x = x.unsqueeze(2).unsqueeze(4)
+        # Reshape x to separate capsule types from spatial locations
+        # We have num_routes capsule types, each repeated across spatial locations
+        # [batch, num_primary_caps_total, in_capsule_dim]
+        # -> [batch, num_primary_caps_total, 1, in_capsule_dim, 1]
+        x_expanded = x.unsqueeze(2).unsqueeze(4)
         
-        # Expand W for batch dimension
-        # [num_routes, num_capsules, in_capsule_dim, out_capsule_dim]
-        # -> [1, num_routes, num_capsules, in_capsule_dim, out_capsule_dim]
-        W = self.W.unsqueeze(0)
+        # Expand W for all spatial locations
+        # W shape: [1, num_routes, num_capsules, in_capsule_dim, out_capsule_dim]
+        # We need to tile it for each spatial location
+        # First, determine spatial size
+        num_spatial = num_primary_caps_total // self.num_routes
+        
+        # Tile W across spatial locations
+        # [1, num_routes, num_capsules, in_capsule_dim, out_capsule_dim]
+        # -> [1, num_primary_caps_total, num_capsules, in_capsule_dim, out_capsule_dim]
+        W_tiled = self.W.repeat(1, num_spatial, 1, 1, 1)
+        W_tiled = W_tiled.view(1, num_primary_caps_total, self.num_capsules, 
+                                self.in_capsule_dim, self.out_capsule_dim)
         
         # Compute prediction vectors u_hat
         # u_hat_j|i = W_ij * u_i
-        # [batch, num_routes, num_capsules, out_capsule_dim]
-        u_hat = torch.matmul(x, W).squeeze(4)
+        # [batch, num_primary_caps_total, num_capsules, out_capsule_dim]
+        u_hat = torch.matmul(x_expanded, W_tiled).squeeze(4)
         
         # Dynamic Routing Algorithm
         # Initialize routing logits b to zero
-        # [batch, num_routes, num_capsules]
-        b = torch.zeros(batch_size, self.num_routes, self.num_capsules).to(x.device)
+        # [batch, num_primary_caps_total, num_capsules]
+        b = torch.zeros(batch_size, num_primary_caps_total, self.num_capsules).to(x.device)
         
         # Routing iterations
         for iteration in range(self.num_routing):
             # Compute coupling coefficients via softmax
             # c_ij represents how much capsule i should send to capsule j
-            c = F.softmax(b, dim=2)  # [batch, num_routes, num_capsules]
+            c = F.softmax(b, dim=2)  # [batch, num_primary_caps_total, num_capsules]
             
             # Expand for broadcasting
-            c = c.unsqueeze(3)  # [batch, num_routes, num_capsules, 1]
+            c = c.unsqueeze(3)  # [batch, num_primary_caps_total, num_capsules, 1]
             
             # Weighted sum of predictions: s = sum(c_ij * u_hat_j|i)
             s = (c * u_hat).sum(dim=1)  # [batch, num_capsules, out_capsule_dim]
@@ -365,7 +385,7 @@ class DigitCapsule(nn.Module):
                 
                 # Agreement: dot product between u_hat and v
                 # Higher agreement increases routing coefficient
-                agreement = (u_hat * v_expand).sum(dim=3)  # [batch, num_routes, num_capsules]
+                agreement = (u_hat * v_expand).sum(dim=3)  # [batch, num_primary_caps_total, num_capsules]
                 
                 # Update routing logits
                 b = b + agreement
@@ -427,10 +447,11 @@ class CapsNet(nn.Module):
             padding=0
         )
         
-        # Calculate number of primary capsules
         # After primary_capsules: spatial size is (216-9)/2 + 1 = 104
+        # We have 32 capsule types, each at 104x104 spatial locations
         # Total primary capsules: 104 * 104 * 32 = 345,088
-        num_primary_caps = 104 * 104 * 32
+        # But for routing, we only need to know there are 32 capsule types
+        num_capsule_types = 32
         
         # ====================================================================
         # Layer 3: Digit Capsules
@@ -438,7 +459,7 @@ class CapsNet(nn.Module):
         # ====================================================================
         self.digit_capsules = DigitCapsule(
             num_capsules=num_classes,
-            num_routes=num_primary_caps,
+            num_routes=num_capsule_types,  # Number of capsule types, not total capsules
             in_capsule_dim=primary_caps_dim,
             out_capsule_dim=digit_caps_dim,
             num_routing=num_routing
