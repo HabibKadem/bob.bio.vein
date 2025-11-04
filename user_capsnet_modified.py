@@ -160,6 +160,17 @@ class DigitCapsule(nn.Module):
         
         # Tile weights across spatial locations
         num_spatial = num_primary_caps_total // self.num_routes
+        
+        # Handle case where division doesn't result in exact multiple
+        if num_primary_caps_total % self.num_routes != 0:
+            # Adjust by trimming or padding
+            expected_total = num_spatial * self.num_routes
+            if num_primary_caps_total > expected_total:
+                # Trim extra capsules
+                x_expanded = x_expanded[:, :expected_total, :, :, :]
+                x = x[:, :expected_total, :]
+                num_primary_caps_total = expected_total
+        
         W_tiled = self.W.repeat(1, num_spatial, 1, 1, 1)
         W_tiled = W_tiled.view(1, num_primary_caps_total, self.num_capsules, 
                                 self.in_capsule_dim, self.out_capsule_dim)

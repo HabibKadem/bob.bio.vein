@@ -346,6 +346,16 @@ class DigitCapsule(nn.Module):
         # First, determine spatial size
         num_spatial = num_primary_caps_total // self.num_routes
         
+        # Handle case where division doesn't result in exact multiple
+        if num_primary_caps_total % self.num_routes != 0:
+            # Adjust by trimming extra capsules to make it divisible
+            expected_total = num_spatial * self.num_routes
+            if num_primary_caps_total > expected_total:
+                # Trim extra capsules
+                x_expanded = x_expanded[:, :expected_total, :, :, :]
+                x = x[:, :expected_total, :]
+                num_primary_caps_total = expected_total
+        
         # Tile W across spatial locations
         # [1, num_routes, num_capsules, in_capsule_dim, out_capsule_dim]
         # -> [1, num_primary_caps_total, num_capsules, in_capsule_dim, out_capsule_dim]
