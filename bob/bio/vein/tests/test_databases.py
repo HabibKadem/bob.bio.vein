@@ -301,3 +301,21 @@ def test_utfvp():
 
     for p in UtfvpDatabase.protocols():
         assert p in checked_protocols, "Protocol {} untested".format(p)
+
+
+def test_dorsalhandveins_basic():
+    """Test that DorsalHandVeinsDatabase can be instantiated and has proper structure"""
+    from bob.bio.vein.database.dorsalhandveins import DorsalHandVeinsDatabase
+
+    # Test instantiation with default protocol
+    database = DorsalHandVeinsDatabase(protocol="default")
+    
+    # Verify the database has the expected attributes
+    assert database.name == "dorsalhandveins"
+    assert database.protocol == "default"
+    
+    # Verify protocols method returns expected list
+    protocols = DorsalHandVeinsDatabase.protocols()
+    assert isinstance(protocols, list)
+    assert "default" in protocols
+

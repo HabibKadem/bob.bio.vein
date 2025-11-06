@@ -36,10 +36,13 @@ setup(
             "wld = bob.bio.vein.config.wide_line_detector",
             # verafinger contactless
             "vera_nom = bob.bio.vein.config.database.verafinger_contactless_nom",
+            # dorsal hand veins
+            "dorsalhandveins_default = bob.bio.vein.config.database.dorsalhandveins_default",
         ],
         "bob.bio.database": [
             "utfvp = bob.bio.vein.config.database.utfvp_nom:database",
             "verafinger_contactless = bob.bio.vein.config.database.verafinger_contactless_nom:database",
+            "dorsalhandveins = bob.bio.vein.config.database.dorsalhandveins_default:database",
         ],
         "bob.bio.pipeline": [
             "wld = bob.bio.vein.config.wide_line_detector:pipeline",
@@ -50,6 +53,7 @@ setup(
             "bob_bio_vein_compare_rois.py = bob.bio.vein.script.compare_rois:main",
             "bob_bio_vein_view_sample.py = bob.bio.vein.script.view_sample:main",
             "bob_bio_vein_blame.py = bob.bio.vein.script.blame:main",
+            "bob_bio_vein_generate_dorsalhandveins_csv.py = bob.bio.vein.script.generate_dorsalhandveins_csv:main",
         ],
     },
     classifiers=[
