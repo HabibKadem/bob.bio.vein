@@ -61,13 +61,31 @@ def generate_csv_from_directory(image_dir, output_csv, image_extension=".png"):
         parts = filename.split("_")
         if len(parts) >= 4 and parts[0] == "person":
             person_id = parts[1]  # e.g., "001"
-            sample_id = parts[3].replace("L", "")  # e.g., "1" from "L1"
+            sample_id_raw = parts[3].replace("L", "")  # e.g., "1" from "L1"
+            
+            # Validate extracted components
+            if not person_id.isdigit():
+                print(
+                    f"Warning: Invalid person ID '{person_id}' in file: {filename}"
+                )
+                print("  Expected format: person_XXX_db1_LY.png where XXX is numeric")
+                continue
+            
+            if not sample_id_raw.isdigit():
+                print(
+                    f"Warning: Invalid sample ID '{sample_id_raw}' in file: {filename}"
+                )
+                print("  Expected format: person_XXX_db1_LY.png where Y is numeric")
+                continue
             
             # For simplicity, we'll use sample_id as session_id
             # and treat each image as a separate enrollment
-            csv_lines.append(f"{filename}{image_extension},{person_id},{sample_id},1")
+            csv_lines.append(f"{filename}{image_extension},{person_id},{sample_id_raw},1")
         else:
             print(f"Warning: Skipping file with unexpected format: {filename}")
+            print("  Expected format: person_XXX_db1_LY.png")
+            print("    where XXX is person ID (e.g., 001, 002)")
+            print("    and Y is sample number (e.g., 1, 2, 3, 4)")
     
     # Write CSV file
     output_path = Path(output_csv)

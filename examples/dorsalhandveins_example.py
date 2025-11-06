@@ -57,7 +57,7 @@ def example_roi_annotation():
         roi_annotator = ROIAnnotation(roi_path=None)
         print("✓ ROI annotator created (no path configured)")
         print("  To use ROI annotations, configure:")
-        print("  bob config set bob.bio.vein.dorsalhandveins.roi [ROI_PATH]")
+        print("  bob config set bob.bio.vein.dorsalhandveins.roi /path/to/roi_annotations")
         
     except Exception as e:
         print(f"✗ Error: {e}")

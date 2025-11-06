@@ -77,16 +77,19 @@ class DorsalHandVeinsDatabase(CSVDataset):
         database_dir = rc.get("bob.bio.vein.dorsalhandveins.directory", "")
         roi_path = rc.get("bob.bio.vein.dorsalhandveins.roi", "")
 
-        # If a CSV file is provided, use it; otherwise, use dataset_original_directory
+        # If a CSV file is provided, use it; otherwise use configured path
         if csv_file_name:
             dataset_protocol_path = csv_file_name
         else:
-            # For now, we'll require a CSV file or the user to provide one
-            # This is a placeholder - in a real implementation, you might
-            # auto-generate the CSV from the directory structure
             dataset_protocol_path = rc.get(
                 "bob.bio.vein.dorsalhandveins.csv", ""
             )
+            if not dataset_protocol_path:
+                raise ValueError(
+                    "No CSV protocol file specified. Either pass csv_file_name "
+                    "parameter or configure it with: "
+                    "bob config set bob.bio.vein.dorsalhandveins.csv [PATH]"
+                )
 
         super().__init__(
             name="dorsalhandveins",
