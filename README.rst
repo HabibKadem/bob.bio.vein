@@ -17,8 +17,8 @@
 
 
 This package is part of the signal-processing and machine learning toolbox
-Bob_. It contains resources for finger, palm and wrist vein recognition as
-`bob.bio.base`_ plugins.
+Bob_. It contains resources for finger, palm, wrist, and dorsal hand vein 
+recognition as `bob.bio.base`_ plugins.
 
 
 Installation
