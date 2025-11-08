@@ -8,12 +8,30 @@ All MATLAB code from the original Bram Ton implementation has been successfully 
 
 ## File Mapping
 
-| MATLAB File | Python Implementation | Description |
-|-------------|----------------------|-------------|
-| `matlab/lib/miura_max_curvature.m` | `bob/bio/vein/extractor/MaximumCurvature.py` | Maximum curvature method for vein extraction |
-| `matlab/lib/miura_repeated_line_tracking.m` | `bob/bio/vein/extractor/RepeatedLineTracking.py` | Repeated line tracking method for vein extraction |
-| `matlab/lib/miura_match.m` | `bob/bio/vein/algorithm/MiuraMatch.py` | Cross-correlation matching algorithm |
-| `matlab/lib/miura_usage.m` | See usage examples below | Example usage (not a core algorithm) |
+### Finger Vein Recognition (Completed)
+
+| MATLAB File | Python Implementation | Description | Status |
+|-------------|----------------------|-------------|---------|
+| `matlab/lib/miura_max_curvature.m` | `bob/bio/vein/extractor/MaximumCurvature.py` | Maximum curvature method for vein extraction | ✅ Complete |
+| `matlab/lib/miura_repeated_line_tracking.m` | `bob/bio/vein/extractor/RepeatedLineTracking.py` | Repeated line tracking method for vein extraction | ✅ Complete |
+| `matlab/lib/miura_match.m` | `bob/bio/vein/algorithm/MiuraMatch.py` | Cross-correlation matching algorithm | ✅ Complete |
+| `matlab/lib/miura_usage.m` | See usage examples below | Example usage (not a core algorithm) | ✅ Complete |
+
+### Hand/Palm Geometry Recognition (In Progress)
+
+| MATLAB File | Python Implementation | Description | Status |
+|-------------|----------------------|-------------|---------|
+| `matlab/lib/pfehdm180.m` | `bob/bio/vein/extractor/HandGeometry.py` | Hand geometry feature extraction system | 🚧 In Progress |
+
+**Note**: The hand geometry extractor (`pfehdm180.m`) is a comprehensive system with ~2000 lines of code including multiple sub-functions. The Python implementation is being developed in phases:
+1. ✅ Core module structure created
+2. 🚧 Hand segmentation (SEGHAND180)
+3. 🚧 Finger point detection (Unhand18)
+4. 🚧 Distance calculations (dist18)
+5. 🚧 Orientation normalization (orimhd18)
+6. 🚧 Geometric measurements (MMpmain18)
+7. 🚧 Helper functions and utilities
+8. 🚧 Testing and validation
 
 ## Detailed Migration Examples
 
