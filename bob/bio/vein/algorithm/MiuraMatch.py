@@ -35,6 +35,14 @@ class MiuraMatch(BioAlgorithm):
 
     Based on [MNM04]_ and [MNM05]_
 
+    This is the Python implementation of the MATLAB code originally written by
+    Bram Ton (b.t.ton@alumnus.utwente.nl) and available at:
+    http://ch.mathworks.com/matlabcentral/fileexchange/35716
+
+    The corresponding MATLAB file is: matlab/lib/miura_match.m
+
+    For migration information from MATLAB to Python, see: MATLAB_TO_PYTHON_MIGRATION.md
+
     Parameters:
 
       ch (:py:class:`int`, optional): Maximum search displacement in y-direction.

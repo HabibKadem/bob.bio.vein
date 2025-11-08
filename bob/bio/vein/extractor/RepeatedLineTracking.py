@@ -18,6 +18,14 @@ class RepeatedLineTracking(Extractor):
     vein patterns based on repeated line tracking and its application to personal
     identification. Machine Vision and Applications, Vol. 15, Num. 4, pp.
     194--203, 2004
+
+    This is the Python implementation of the MATLAB code originally written by
+    Bram Ton (b.t.ton@alumnus.utwente.nl) and available at:
+    http://ch.mathworks.com/matlabcentral/fileexchange/35716
+
+    The corresponding MATLAB file is: matlab/lib/miura_repeated_line_tracking.m
+
+    For migration information from MATLAB to Python, see: MATLAB_TO_PYTHON_MIGRATION.md
     """
 
     def __init__(
