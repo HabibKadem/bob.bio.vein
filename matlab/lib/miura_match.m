@@ -2,23 +2,27 @@ function score = miura_match(I, R, cw, ch)
 % This is the matching procedure described by Miura et al. in their paper.
 % A small difference is that this matching function calculates the match
 % ratio instead of the mismatch ratio.
-
+%
+% NOTE: This MATLAB code has been transcoded to Python.
+% Python implementation: bob/bio/vein/algorithm/MiuraMatch.py
+% For migration guide, see: MATLAB_TO_PYTHON_MIGRATION.md
+%
 % Parameters:
 %  I  - Input image
 %  R  - Registered template image
 %  cw - Maximum search displacement in x-direction
 %  ch - Maximum search displacement in y-direction
-
+%
 % Returns:
 %  score - Value between 0 and 0.5, larger value is better match
-
+%
 % Reference:
 % Feature extraction of finger vein patterns based on iterative line
 %    tracking and its application to personal identification
 % N. Miura, A. Nagasaka, and T. Miyatake
 % Syst. Comput. Japan 35 (7 June 2004), pp. 61--71
 % doi: 10.1002/scj.v35:7
-
+%
 % Author:  Bram Ton <b.t.ton@alumnus.utwente.nl>
 % Date:    20th December 2011
 % License: Simplified BSD License

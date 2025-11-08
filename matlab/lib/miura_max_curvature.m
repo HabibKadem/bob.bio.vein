@@ -1,25 +1,29 @@
 function veins = miura_max_curvature(img, fvr, sigma, stem)
 % Maximum curvature method
-
+%
+% NOTE: This MATLAB code has been transcoded to Python.
+% Python implementation: bob/bio/vein/extractor/MaximumCurvature.py
+% For migration guide, see: MATLAB_TO_PYTHON_MIGRATION.md
+%
 % Parameters:
 %  img    - Input vascular image
 %  fvr    - Finger vein region
 %  sigma  - Sigma used for determining derivatives
 %  stem   - (optional) name of the stem where to save partial results
-
+%
 % Returns:
 %  veins - Vein image
-
+%
 % Reference:
 % Extraction of finger-vein patterns using maximum curvature points in
 %   image profiles
 % N. Miura, A. Nagasaka, and T. Miyatake
 % IAPR conference on machine vision applications 9 (2005), pp. 347--350
-
+%
 % Author:  Bram Ton <b.t.ton@alumnus.utwente.nl>
 % Date:    20th December 2011
 % License: Simplified BSD License
-
+%
 % Changelog:
 % 2012/01/10 - Speed enhancement by rewriting diag() functions
 %              with linear indices.

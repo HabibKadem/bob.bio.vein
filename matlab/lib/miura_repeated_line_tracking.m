@@ -1,23 +1,27 @@
 function veins = miura_repeated_line_tracking(img, fvr, iterations, r, W)
 % Repeated line tracking
-
+%
+% NOTE: This MATLAB code has been transcoded to Python.
+% Python implementation: bob/bio/vein/extractor/RepeatedLineTracking.py
+% For migration guide, see: MATLAB_TO_PYTHON_MIGRATION.md
+%
 % Parameters:
 %  img        - Input vascular image
 %  fvr        - Binary image of the finger region
 %  iterations - Maximum number of iterations
 %  r - Distance between tracking point and cross section of the profile
 %  W - Width of profile
-
+%
 % Returns:
 %  veins - Vein image
-
+%
 % Reference:
 % Feature extraction of finger vein patterns based on repeated line
 %    tracking and its application to personal identification
 % N. Miura, A. Nagasaka, and T. Miyatake
 % Machine Vision and Applications, Volume 15, Number 4 (2004), pp. 194--203
 % doi: 10.1007/s00138-004-0149-2
-
+%
 % Author:  Bram Ton <b.t.ton@alumnus.utwente.nl>
 % Date:    20th December 2011
 % License: Simplified BSD License
